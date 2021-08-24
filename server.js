@@ -27,3 +27,4 @@ app.use(passport.session());
 
 /* routing section start */
 app.use('/member', require('./router/member'));
+app.use('/post', require('./router/post'));
