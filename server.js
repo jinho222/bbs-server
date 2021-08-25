@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const cors = require('cors');
+
 const passport = require('./utils/passport');
 const mongoConnect = require('./utils/database').mongoConnect;
 
@@ -22,6 +24,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cors());
 
 /* middleware section end */
 
