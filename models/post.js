@@ -56,6 +56,28 @@ class Post {
 		return db.collection('post')
 			.deleteOne(deleteTarget, cb);
 	}
+
+	static getPostList(payload, cb) {
+		const db = getDB();
+		const { pageNo } = payload;
+		const limit = 5;
+		const offset = (pageNo - 1) * limit;
+		return db.collection('post')
+			.find().skip(offset).limit(limit).toArray(cb);
+	}
+
+	static getPostDetail(payload, cb) {
+		const db = getDB();
+		const { postNo } = payload;
+		return db.collection('post')
+			.findOne({ _id: parseInt(postNo) }, cb);
+	}
+
+	static getAllPost(cb) {
+		const db = getDB();
+		return db.collection('post')
+			.find().toArray(cb);
+	}
 }
 
 module.exports = Post;

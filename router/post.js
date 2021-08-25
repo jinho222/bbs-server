@@ -23,4 +23,30 @@ router.delete('/delete', (req, res) => {
 	});
 });
 
+router.get('/list', (req, res) => {
+	const { pageNo } = req.query;
+	Post.getPostList({ pageNo }, (e, listData) => {
+		if (e) console.log(e);
+		Post.getAllPost((e, allData) => {
+			if (e) console.log(e);
+			const result = {
+				totalNumber: allData.length,
+				currPagePostNumber: listData.length,
+				currPageNo: pageNo,
+				postList: listData
+			}
+			res.status(200).send(result);
+		})
+	})
+})
+
+router.get('/detail', (req, res) => {
+	const { postNo } = req.query;
+	Post.getPostDetail({ postNo }, (e, data) => {
+		if (e) console.log(e);
+		if (!data) res.status(200).send({ message: '해당하는 게시물이 없습니다.' })
+		res.status(200).send(data);
+	})
+})
+
 module.exports = router;
