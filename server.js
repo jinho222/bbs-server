@@ -1,7 +1,9 @@
 const express = require('express');
-const app = express();
+const app = express();	
 const session = require('express-session');
 const cors = require('cors');
+const multer = require('multer');	// for formdata
+const upload = multer(); 
 
 const passport = require('./utils/passport');
 const mongoConnect = require('./utils/database').mongoConnect;
@@ -16,7 +18,10 @@ mongoConnect(() => {
 
 /* middleware section start */
 
-app.use(express.urlencoded({ extended: false }));
+// for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+// for parsing multipart/form-data
+app.use(upload.array());
 app.use(session({
 	secret: '!@#$!@#$',
 	resave: false,

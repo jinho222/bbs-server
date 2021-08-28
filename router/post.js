@@ -32,7 +32,7 @@ router.get('/list', (req, res) => {
 			const result = {
 				totalNumber: allData.length,
 				currPagePostNumber: listData.length,
-				currPageNo: pageNo,
+				currPageNo: parseInt(pageNo),
 				postList: listData
 			}
 			res.status(200).send(result);

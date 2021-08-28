@@ -66,7 +66,7 @@ class Post {
 			.find().skip(offset).limit(limit).toArray(cb);
 	}
 
-	static getPostDetail(payload, cb) {
+	static getPostDetail(payload, cb) {	
 		const db = getDB();
 		const { postNo } = payload;
 		return db.collection('post')
