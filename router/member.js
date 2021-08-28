@@ -23,15 +23,12 @@ router.post('/signup', (req, res) => {
 
 /* login */
 router.post('/login',
-		passport.authenticate('local', {
-			successRedirect: '/member/login-success',
-			failureFlash: true,
-		}),
+		passport.authenticate('local'),
+		(req, res) => {
+			console.log(req.user);
+			res.status(200).send({...req.user});
+		}
 );
-
-router.get('/login-success', (req, res) => {
-	res.status(200).send({...req.user});
-});
 
 /* logout */
 router.post('/logout', (req, res) => {
