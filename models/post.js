@@ -60,7 +60,12 @@ class Post {
 		const { pageNo } = payload;
 		const limit = 5;
 		const offset = (pageNo - 1) * limit;
-		return db.collection('post').find().skip(offset).limit(limit).toArray();
+		return db.collection('post')
+			.find()
+			.sort({ _id: -1 }) // 역순
+			.skip(offset)
+			.limit(limit)
+			.toArray();
 	}
 
 	getPostDetail(payload) {	
