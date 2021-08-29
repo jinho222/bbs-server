@@ -3,35 +3,35 @@ const { getDB } = require("../utils/database");
 class Post {
 	constructor() {}
 
-	static addPost(payload, cb) {
-		const db = getDB();
-		db.collection('post_count')
-			.findOne({ name: 'post_count' }, (e, data) => {
-				if (e) console.log(e);
-				const { count } = data;
-				const _id = count + 1;
-				const newPost = {
-					_id,
-					...payload,
-				};
-				return db.collection('post')
-					.insertOne(newPost, (e, data) => {
-						if (e) console.log(e);
-						const updateTarget = {
-							name: 'post_count',
-						};
-						const updateContent = {
-							$set: {
-								count: _id,
-							}
-						};
-						db.collection('post_count')
-							.updateOne(updateTarget, updateContent, cb);
-					});
-			})
+	async addPost(payload) {
+		try {
+			// 게시물 _id 설정을 위해 post_count 컬렉션을 열람
+			const db = getDB();
+			const { count } = await db.collection('post_count').findOne({ name: 'post_count' });
+			const _id = count + 1;
+			const newPost = {
+				_id,
+				...payload,
+			}
+
+			// 게시물 추가 및 post_count 업데이트
+			await db.collection('post').insertOne(newPost)
+			const updateTarget = {
+				name: 'post_count',
+			};
+			const updateContent = {
+				$set: {
+					count: _id,
+				}
+			};
+			
+			return db.collection('post_count').updateOne(updateTarget, updateContent);
+			} catch (e) {
+				console.log(e);
+		}
 	}
 
-	static updatePost(payload, cb) {
+	updatePost(payload) {
 		const db = getDB();
 		const { _id, title, content } = payload;
 		const updateTarget = {
@@ -43,40 +43,35 @@ class Post {
 				content
 			}
 		};
-		return db.collection('post')
-			.updateOne(updateTarget, updateContent, cb);
+		return db.collection('post').updateOne(updateTarget, updateContent);
 	}
 
-	static deletePost(payload, cb) {
+	deletePost(payload) {
 		const db = getDB();
 		const { _id } = payload;
 		const deleteTarget = {
 			_id: parseInt(_id),
 		};
-		return db.collection('post')
-			.deleteOne(deleteTarget, cb);
+		return db.collection('post').deleteOne(deleteTarget);
 	}
 
-	static getPostList(payload, cb) {
+	getPostList(payload) {
 		const db = getDB();
 		const { pageNo } = payload;
 		const limit = 5;
 		const offset = (pageNo - 1) * limit;
-		return db.collection('post')
-			.find().skip(offset).limit(limit).toArray(cb);
+		return db.collection('post').find().skip(offset).limit(limit).toArray();
 	}
 
-	static getPostDetail(payload, cb) {	
+	getPostDetail(payload) {	
 		const db = getDB();
 		const { postNo } = payload;
-		return db.collection('post')
-			.findOne({ _id: parseInt(postNo) }, cb);
+		return db.collection('post').findOne({ _id: parseInt(postNo) });
 	}
 
-	static getAllPost(cb) {
+	getAllPost() {
 		const db = getDB();
-		return db.collection('post')
-			.find().toArray(cb);
+		return db.collection('post').find().toArray();
 	}
 }
 

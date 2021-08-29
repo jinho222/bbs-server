@@ -2,33 +2,30 @@ const express = require('express');
 const router = express.Router();
 const passport = require('../utils/passport');
 const Member = require('../models/member');
+const member = new Member();
 
 /* signup */
-router.post('/signup', (req, res) => {
+router.post('/signup', async (req, res) => {
 	const { id } = req.body;
-	Member.findById(id, (e, data) => {
-		if (e) console.log(e);
-		console.log(req.body);
+	try {
+		const data = await member.findById(id);
 		// 중복된 아이디의 회원이 존재할 때
 		if (data) {
 			res.status('409').send({ message: '이미 존재하는 아이디입니다.' });
+			// 회원가입 성공
 		} else {
-			Member.signup({ ...req.body }, (e, data) => {
-				if (e) console.log(e);
-				res.status('200').send({ message: '회원가입에 성공했습니다.' });
-			});
+			await member.signup({ ...req.body });
+			res.status('200').send({ message: '회원가입에 성공했습니다.' });
 		}
-	});
-})
+	} catch (e) {
+		console.log(e);
+	}
+});
 
 /* login */
-router.post('/login',
-		passport.authenticate('local'),
-		(req, res) => {
-			console.log(req.user);
-			res.status(200).send({...req.user});
-		}
-);
+router.post('/login', passport.authenticate('local'), (req, res) => {
+		res.status(200).send({...req.user});
+});
 
 /* logout */
 router.post('/logout', (req, res) => {

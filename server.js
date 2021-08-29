@@ -8,7 +8,7 @@ const upload = multer();
 const passport = require('./utils/passport');
 const mongoConnect = require('./utils/database').mongoConnect;
 
-require('dotenv').config();
+require('dotenv').config();	
 
 mongoConnect(() => {
 	app.listen(process.env.PORT, () => {
@@ -16,23 +16,21 @@ mongoConnect(() => {
 	});
 })
 
-/* middleware section start */
-
-// for parsing application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
-// for parsing multipart/form-data
-app.use(upload.array());
+/* ANCHOR middleware use section */
+app.use(express.urlencoded({ extended: true }));	// for application/xwww-form-urlencoded
+app.use(upload.array());	// for parsing multipart/form-data
 app.use(session({
-	secret: '!@#$!@#$',
+	secret: process.env.SECRET_CODE,
 	resave: false,
-	saveUninitialized: true,
+	saveUninitialized: false,
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors());
+app.use(cors({
+	origin: true,
+	credentials: true,
+}));
 
-/* middleware section end */
-
-/* routing section start */
+/* ANCHOR router section */
 app.use('/member', require('./router/member'));
 app.use('/post', require('./router/post'));

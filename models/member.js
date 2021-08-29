@@ -3,14 +3,14 @@ const getDB = require('../utils/database').getDB;
 class Member {
 	constructor() {}
 
-	static findById(id, cb) {
+	findById(id) {
 		const db = getDB();
-		return db.collection('member').findOne({ id }, cb);
+		return db.collection('member').findOne({ id });
 	}
 
-	static signup(payload, cb) {
+	signup(payload) {
 		const db = getDB();
-		return db.collection('member').insertOne({...payload}, cb)
+		return db.collection('member').insertOne({...payload});
 	}
 }
 
