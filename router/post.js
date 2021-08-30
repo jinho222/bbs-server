@@ -3,7 +3,18 @@ const router = express.Router();
 const Post = require('../models/post');
 const post = new Post();
 
-router.post('/add', (req, res) => {
+router.get('/', (req, res) => {
+	const { postNo } = req.query;
+	post.getPostDetail({ postNo }).then(data => {
+		if (!data) res.status(200).send({ message: '해당하는 게시물이 없습니다.' })
+		res.status(200).send(data);
+	}).catch(e => {
+		console.log(e);
+	});
+})
+
+
+router.post('/', (req, res) => {
 	const payload = {
 		...req.body,
 	}
@@ -14,7 +25,7 @@ router.post('/add', (req, res) => {
 	});
 });
 
-router.put('/update', (req, res) => {
+router.put('/', (req, res) => {
 	console.log(req.body);
 	post.updatePost(req.body).then(() => {
 		res.status(200).send({ message: '게시물이 수정되었습니다.' });
@@ -23,7 +34,7 @@ router.put('/update', (req, res) => {
 	})
 });
 
-router.delete('/delete', (req, res) => {
+router.delete('/', (req, res) => {
 	post.deletePost(req.body).then(() => {
 		res.status(200).send({ message: '게시물이 삭제되었습니다.' });
 	}).catch(e => {
@@ -38,9 +49,9 @@ router.get('/list', async (req, res) => {
 		const allData = await post.getAllPost();
 
 		const result = {
-			totalNumber: allData.length,
-			currPagePostNumber: listData.length,
-			currPageNo: parseInt(pageNo),
+			totalCnt: allData.length,
+			pageNo: parseInt(pageNo),
+			postsPerPage: 5,
 			postList: listData
 		}
 
@@ -48,16 +59,6 @@ router.get('/list', async (req, res) => {
 	} catch (e) {
 		console.log(e);
 	}
-})
-
-router.get('/detail', (req, res) => {
-	const { postNo } = req.query;
-	post.getPostDetail({ postNo }).then(data => {
-		if (!data) res.status(200).send({ message: '해당하는 게시물이 없습니다.' })
-		res.status(200).send(data);
-	}).catch(e => {
-		console.log(e);
-	});
 })
 
 module.exports = router;
