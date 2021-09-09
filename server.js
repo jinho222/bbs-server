@@ -3,6 +3,7 @@ const app = express();
 const session = require('express-session');
 const cors = require('cors');
 const multer = require('multer');	// for formdata
+const path = require('path');
 const upload = multer(); 
 
 const passport = require('./utils/passport');
@@ -16,7 +17,8 @@ mongoConnect(() => {
 	});
 })
 
-/* ANCHOR middleware use section */
+/* middleware use section */
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));	// for application/xwww-form-urlencoded
 app.use(upload.array());	// for parsing multipart/form-data
 app.use(session({
@@ -31,6 +33,16 @@ app.use(cors({
 	credentials: true,
 }));
 
-/* ANCHOR router section */
+/* router section */
 app.use('/member', require('./router/member'));
 app.use('/post', require('./router/post'));
+
+/* rendering  */
+// 1. basic
+app.get('/', (req, res) => {
+	res.sendFile(path.join(__dirname, 'public/index.html'));
+});
+// 2. reload or input url
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname, 'public/index.html'));
+});
