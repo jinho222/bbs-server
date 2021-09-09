@@ -1,6 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const Member = require('../models/member');
+const encryptPw = require('./crypto').encryptPw;
 
 const member = new Member();
 
@@ -25,7 +26,9 @@ passport.use(new LocalStrategy({
 	(id, pw, done) => {
 		member.findById(id).then(user => {
 			if (!user) return done(null, false, { message: 'Non Existing User ID' });
-			if (user.pw !== pw) return done(null, false, { message: 'Incorrect Password' });
+			if (user.pw !== encryptPw(pw)) {
+				return done(null, false, { message: 'Incorrect Password' });
+			}
 			return done(null, user);
 		}).catch(e => {
 			return done(e);

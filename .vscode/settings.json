@@ -4,8 +4,4 @@
 		"configurations": [],
 		"compounds": []
 	},
-	"editor.tokenColorCustomizations": {
-		"comments": "#666",
-	},
-	"workbench.colorTheme": "Github Light Theme - Gray"
 }
