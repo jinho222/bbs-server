@@ -30,8 +30,9 @@ app.use(cors({
 	origin: true,
 	credentials: true,
 }));
+// request check for debugging
 app.use((req, res, next) => {
-	console.log('request');
+	console.log('REQUEST');
 	next();
 })
 
