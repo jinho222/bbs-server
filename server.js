@@ -3,7 +3,6 @@ const app = express();
 const session = require('express-session');
 const cors = require('cors');
 const multer = require('multer');	// for formdata
-const path = require('path');
 const upload = multer(); 
 
 const passport = require('./utils/passport');
@@ -12,13 +11,12 @@ const mongoConnect = require('./utils/database').mongoConnect;
 require('dotenv').config();	
 
 mongoConnect(() => {
-	app.listen(process.env.PORT || 8080, () => {
-		console.log(`server listening`);
+	app.listen(process.env.PORT, () => {
+		console.log(`server listening on ${process.env.PORT}`);
 	});
 })
 
 /* middleware use section */
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));	// for application/xwww-form-urlencoded
 app.use(upload.array());	// for parsing multipart/form-data
 app.use(session({
@@ -36,13 +34,3 @@ app.use(cors({
 /* router section */
 app.use('/member', require('./router/member'));
 app.use('/post', require('./router/post'));
-
-/* rendering  */
-// 1. basic
-app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, 'public/index.html'));
-});
-// 2. reload or input url
-app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, 'public/index.html'));
-});
