@@ -12,8 +12,8 @@ const mongoConnect = require('./utils/database').mongoConnect;
 require('dotenv').config();	
 
 mongoConnect(() => {
-	app.listen(process.env.PORT || 5000, () => {
-		console.log(`server listening on ${process.env.PORT}`);
+	app.listen(process.env.PORT || 8080, () => {
+		console.log(`server listening`);
 	});
 })
 
