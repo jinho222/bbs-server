@@ -30,6 +30,10 @@ app.use(cors({
 	origin: true,
 	credentials: true,
 }));
+app.use((req, res, next) => {
+	console.log('request');
+	next();
+})
 
 /* router section */
 app.use('/member', require('./router/member'));
