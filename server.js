@@ -6,7 +6,7 @@ const multer = require('multer');	// for formdata
 const upload = multer(); 
 
 const passport = require('./utils/passport');
-const mongoConnect = require('./utils/database').mongoConnect;
+const { mongoConnect } = require('./utils/database');
 
 require('dotenv').config();	
 
@@ -26,7 +26,7 @@ app.use(session({
 	cookie: {
 		sameSite: 'none',
 		maxAge: 1000 * 60 * 60,
-		secure: true,
+		secure: 'auto',
 	}
 }));
 app.use(passport.initialize());

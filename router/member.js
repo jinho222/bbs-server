@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const encryptPw = require('../utils/crypto').encryptPw;
+const { encryptPw } = require('../utils/crypto');
 const passport = require('../utils/passport');
 const Member = require('../models/member');
 const { authCheck } = require('../utils/auth');

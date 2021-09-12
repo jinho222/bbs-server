@@ -1,15 +1,17 @@
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const { Strategy : LocalStrategy }  = require('passport-local');
 const Member = require('../models/member');
-const encryptPw = require('./crypto').encryptPw;
+const { encryptPw } = require('./crypto');
 
 const member = new Member();
 
 passport.serializeUser((user, done) => {
+	console.log('serialize');
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
+	console.log('deserailize');
 	member.findById(id, (e, user) => {
 		if (e) return done(e);
 		console.log('deserialize user');
