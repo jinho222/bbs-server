@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/post');
 const post = new Post();
-const { authCheck } = require('../utils/auth');
 
 router.get('/', (req, res) => {
 	const { postNo } = req.query;
@@ -14,7 +13,7 @@ router.get('/', (req, res) => {
 	});
 })
 
-router.post('/', authCheck, (req, res) => {
+router.post('/', (req, res) => {
 	const payload = {
 		...req.body,
 	}
@@ -25,7 +24,7 @@ router.post('/', authCheck, (req, res) => {
 	});
 });
 
-router.put('/', authCheck, (req, res) => {
+router.put('/', (req, res) => {
 	console.log(req.body);
 	post.updatePost(req.body).then(() => {
 		res.status(200).send({ message: '게시물이 수정되었습니다.' });
@@ -34,7 +33,7 @@ router.put('/', authCheck, (req, res) => {
 	})
 });
 
-router.delete('/', authCheck, (req, res) => {
+router.delete('/', (req, res) => {
 	post.deletePost(req.body).then(() => {
 		res.status(200).send({ message: '게시물이 삭제되었습니다.' });
 	}).catch(e => {
@@ -43,7 +42,6 @@ router.delete('/', authCheck, (req, res) => {
 });
 
 router.get('/list', async (req, res) => {
-	console.log('GET list');
 	const { pageNo } = req.query;
 	try {
 		const listData = await post.getPostList({ pageNo });
