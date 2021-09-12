@@ -23,6 +23,11 @@ app.use(session({
 	secret: process.env.SECRET_CODE,
 	resave: false,
 	saveUninitialized: false,
+	cookie: {
+		sameSite: 'none',
+		maxAge: 1000 * 60 * 60,
+		secure: true,
+	}
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -30,11 +35,6 @@ app.use(cors({
 	origin: true,
 	credentials: true,
 }));
-// request check for debugging
-app.use((req, res, next) => {
-	console.log('REQUEST');
-	next();
-})
 
 /* router section */
 app.use('/member', require('./router/member'));

@@ -3,6 +3,8 @@ const router = express.Router();
 const encryptPw = require('../utils/crypto').encryptPw;
 const passport = require('../utils/passport');
 const Member = require('../models/member');
+const { authCheck } = require('../utils/auth');
+
 const member = new Member();
 
 /* signup */
@@ -32,7 +34,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 });
 
 /* logout */
-router.post('/logout', (req, res) => {
+router.post('/logout', authCheck, (req, res) => {
 	req.logout();
 	res.status(200).send({ message: '로그아웃되었습니다.' });
 })
