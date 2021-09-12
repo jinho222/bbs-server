@@ -1,5 +1,5 @@
 const crypto = require('crypto');
 
-exports.encryptPw = function encryptPw(pw) {
+exports.encryptPw = function (pw) {
 	return crypto.createHash('sha512').update(pw).digest('base64');
 }

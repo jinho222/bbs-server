@@ -13,7 +13,6 @@ router.get('/', (req, res) => {
 	});
 })
 
-
 router.post('/', (req, res) => {
 	const payload = {
 		...req.body,
@@ -59,6 +58,6 @@ router.get('/list', async (req, res) => {
 	} catch (e) {
 		console.log(e);
 	}
-})
+});
 
 module.exports = router;
